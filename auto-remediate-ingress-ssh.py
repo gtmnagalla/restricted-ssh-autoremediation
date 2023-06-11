@@ -1,4 +1,4 @@
-## Lambda script autoremediates ingress ssh access from internet ##
+## Lambda script that autoremediates ingress ssh access from internet ##
 
 import boto3
 
