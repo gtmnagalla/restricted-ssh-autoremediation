@@ -30,7 +30,7 @@ def lambda_handler(event, context):
             for sg in response['SecurityGroups']:
                 for ip in sg['IpPermissions']:
                     if ip['IpProtocol'] == 'tcp':
-                        for cidr in ip.get('IpRanges', []):
+                        for cidr in ip('IpRanges'):
                             if cidr['CidrIp'] == '0.0.0.0/0' and (ip['FromPort'] == 22 or ip['FromPort'] == 3389):
                                 print(f"Blocking {ip['FromPort']} access from 0.0.0.0/0 on security group {security_group_id}")
                                 ec2_client.revoke_security_group_ingress(
