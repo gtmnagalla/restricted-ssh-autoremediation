@@ -11,11 +11,11 @@ def lambda_handler(event, context):
     ec2_client = boto3.client('ec2')
     
     # Config rule name that detects unrestricted SSH or RDP traffic
-    nacl_rule = "nacl-no-unrestricted-ssh-rdp"
+    config_rule = "nacl-no-unrestricted-ssh-rdp"
     
     # Get non-compliant rule details
     non_compliant_detail = config_client.get_compliance_details_by_config_rule(
-        ConfigRuleName=nacl_rule,
+        ConfigRuleName=config_rule,
         ComplianceTypes=['NON_COMPLIANT'],
         Limit=100
     )
@@ -23,7 +23,7 @@ def lambda_handler(event, context):
     
     # Block either RDP or SSH access on security group
     if len(results) > 0:
-        print(f"The following resource(s) are not compliant with AWS Config rule: {nacl_rule}")
+        print(f"The following resource(s) are not compliant with AWS Config rule: {config_rule}")
         for security_group in results:
             security_group_id = security_group['EvaluationResultIdentifier']['EvaluationResultQualifier']['ResourceId']
             response = ec2_client.describe_security_groups(GroupIds=[security_group_id])
